@@ -1,39 +1,31 @@
-# This is a sample Python script.
-
-# Press ⌃R to execute it or replace it with your code.
-# Press Double ⇧ to search everywhere for classes, files, tool windows, actions, and settings.
-
 from sklearn.linear_model import LinearRegression
 import pandas as pd
-import numpy as np
 import matplotlib.pyplot as plt
 
 
-def test():
+def main():
     df = pd.read_csv("data.csv")
-    print(df.head())
+    print(df.head())  # 데이터 헤더
 
-    X = df["설명변수"]
+    x = df["설명변수"]
     y = df["목표변수"]
-    plt.plot(X, y, 'o')
 
     line_fitter = LinearRegression()
-    line_fitter.fit(X.values.reshape(-1, 1), y)
+    line_fitter.fit(x.values.reshape(-1, 1), y)  # 예측
 
     print("기울기 : ", line_fitter.coef_)
     print("y절편 : ", line_fitter.intercept_)
 
-    arr = [-11, 4, -9, 2, -10, -2, 0, -3, 1, -6, -7, -5, -8, -1]
-    for i in arr:
-        print(i, "->", line_fitter.predict([[i]]))
+    res = pd.read_csv("result.csv")
+    res['목표값'] = line_fitter.coef_ * res['새로운데이터'] + line_fitter.intercept_
+    res.to_csv("result.csv", index=False)
+    print(res.head())
 
-    plt.plot(X, y, 'o')
-    plt.plot(X, line_fitter.predict(X.values.reshape(-1, 1)))
+    plt.plot(x, y, 'o')  # 데이터 그래프에 그리기
+    plt.plot(x, line_fitter.predict(x.values.reshape(-1, 1)))  # 예측한 그래프 그리기
     plt.show()
 
 
-# Press the green button in the gutter to run the script.
 if __name__ == '__main__':
-    test()
+    main()
 
-# See PyCharm help at https://www.jetbrains.com/help/pycharm/
